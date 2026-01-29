@@ -1,0 +1,9 @@
+id,postId,username,type,comment,timestamp
+1,1,bob,like,,1706400000
+2,1,charlie,comment,Great first post!,1706400100
+3,2,alice,like,,1706400200
+4,2,diana,comment,C++ is awesome,1706400300
+5,3,eve,like,,1706400400
+6,4,bob,comment,I love Atlanta too,1706400500
+7,4,charlie,like,,1706400600
+8,1,diana,comment,Welcome!,1706400700
