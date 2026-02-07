@@ -273,12 +273,13 @@ private:
     vector<string> parseCSVLine(const string &line)
     {
         vector<string> cells;
-    
+
         stringstream ss(line);
 
         string cell;
 
-        while (getline(ss, cell, ',')) {
+        while (getline(ss, cell, ','))
+        {
             cells.push_back(trim(cell));
         }
 
@@ -295,7 +296,8 @@ private:
      * C++ TIP: Output parameters (int& result) are common in C++
      * They're like returning multiple values. In Java you'd return an Optional<Integer>.
      */
-    bool safeParseInt(const string &s, int &result) {
+    bool safeParseInt(const string &s, int &result)
+    {
 
         try
         {
@@ -332,91 +334,112 @@ private:
 
     // ------
 
-    void loadUsers(map<int, User> &local_users) {
+    void loadUsers(map<int, User> &local_users)
+    {
 
         ifstream infile(users_csv_path);
 
-        if(!infile.is_open()) {
-            cerr << "Failed to open: " << users_csv_path << endl; 
-            return; 
+        if (!infile.is_open())
+        {
+            cerr << "Failed to open: " << users_csv_path << endl;
+            return;
         }
 
         string line;
         getline(infile, line);
 
-        while (getline(infile, line)){
+        while (getline(infile, line))
+        {
 
-            if(trim(line).empty()) continue; 
+            if (trim(line).empty())
+                continue;
 
             vector<string> cells = parseCSVLine(line);
 
             int id = 1;
-            if(!safeParseInt(cells[0], id)) continue; 
+            if (!safeParseInt(cells[0], id))
+                continue;
 
-            if(cells.size() < 3) continue; 
+            if (cells.size() < 3)
+                continue;
 
             local_users[id] = User(id, cells[1], cells[2]);
         }
     }
 
-    void loadPosts(map<int, Post> &local_posts) {
+    void loadPosts(map<int, Post> &local_posts)
+    {
 
         ifstream infile(posts_csv_path);
 
-        if(!infile.is_open()){
-            cerr << "File failed to open: " << posts_csv_path << endl; 
+        if (!infile.is_open())
+        {
+            cerr << "File failed to open: " << posts_csv_path << endl;
             return;
         }
 
-        string line; 
+        string line;
         getline(infile, line);
-        
-        while(getline(infile, line)){
 
-            if(trim(line).empty()) continue; 
+        while (getline(infile, line))
+        {
+
+            if (trim(line).empty())
+                continue;
             vector<string> cells = parseCSVLine(line);
 
-            int id = 0; 
-            if(!safeParseInt(cells[0], id)) continue; 
+            int id = 0;
+            if (!safeParseInt(cells[0], id))
+                continue;
 
-            int views = 0; 
-            if(!safeParseInt(cells[3], views)) continue; 
+            int views = 0;
+            if (!safeParseInt(cells[3], views))
+                continue;
 
-            if(cells.size() < 4) continue; 
-            
+            if (cells.size() < 4)
+                continue;
+
             local_posts[id] = Post(id, cells[1], cells[2], views);
         }
     }
 
-    void loadEngagements(map<int, Engagement> &local_engagement) {
+    void loadEngagements(map<int, Engagement> &local_engagement)
+    {
 
         ifstream infile(engagements_csv_path);
 
-        if(!infile.is_open()){
-            cerr << "File coule not open: " << engagements_csv_path << endl; 
+        if (!infile.is_open())
+        {
+            cerr << "File coule not open: " << engagements_csv_path << endl;
             return;
         }
 
-        string line; 
+        string line;
         std::getline(infile, line);
-        
-        while(getline(infile, line)){
 
-            if(trim(line).empty()) continue; 
+        while (getline(infile, line))
+        {
+
+            if (trim(line).empty())
+                continue;
 
             vector<string> cells = parseCSVLine(line);
-            if(cells.size() < 6) continue;
-            
-            int id = 0; 
-            if(!safeParseInt(cells[0], id)) continue; 
+            if (cells.size() < 6)
+                continue;
 
-            int postID = 0; 
-            if(!safeParseInt(cells[1], postID)) continue; 
-            
-            long long timestamp = 0; 
-            if(!safeParseLongLong(cells[5], timestamp)) continue;
+            int id = 0;
+            if (!safeParseInt(cells[0], id))
+                continue;
 
-            local_engagement[id] = Engagement(id, postID, cells[2], cells[3], cells[4], timestamp); 
+            int postID = 0;
+            if (!safeParseInt(cells[1], postID))
+                continue;
+
+            long long timestamp = 0;
+            if (!safeParseLongLong(cells[5], timestamp))
+                continue;
+
+            local_engagement[id] = Engagement(id, postID, cells[2], cells[3], cells[4], timestamp);
         }
     }
 
@@ -432,7 +455,8 @@ private:
     void loadSingleFile(int type,
                         map<int, User> &local_users,
                         map<int, Post> &local_posts,
-                        map<int, Engagement> &local_engagements){
+                        map<int, Engagement> &local_engagements)
+    {
 
         // TODO: Implement file loading based on type
         //
@@ -462,17 +486,22 @@ private:
         //
         // YOUR CODE HERE:
 
-        if (type == 0) {
+        if (type == 0)
+        {
+
             loadUsers(local_users);
         }
-        else if (type == 1) {
+        else if (type == 1)
+        {
+
             loadPosts(local_posts);
         }
-        else {
+        else
+        {
+
             loadEngagements(local_engagements);
         }
     }
-
 
     /**
      * Atomically write a CSV file using temp file + rename pattern.
@@ -491,9 +520,6 @@ private:
                         const vector<string> &lines)
     {
         // Suppress unused parameter warnings until implemented
-        (void)path;
-        (void)header;
-        (void)lines;
 
         // TODO: Implement atomic file writing
         //
@@ -508,16 +534,42 @@ private:
         //
         // YOUR CODE HERE:
 
+        string temp_path = path + ".tmp";
 
+        ofstream out(temp_path);
 
+        if (!out)
+        {
+            return false;
+        }
 
-        return false; // Placeholder
+        // write the header to the file
+        out << header;
+
+        for (size_t i = 0; i < lines.size(); i++)
+        {
+            out << lines[i];
+        }
+
+        out.close();
+
+        if (rename(temp_path.c_str(), path.c_str()) != 0)
+        {
+            remove(temp_path.c_str());
+            return false;
+        }
+
+        return true;
     }
 
     /**
      * Rebuild secondary indexes from main data.
      * Call this after loading data or after modifications.
      */
+
+    // unordered_map<int, int> post_to_user;        // Quick postID -> userID
+    // unordered_map<int, string> user_to_location; // quick userID -> Location
+
     void rebuildIndexes()
     {
         // TODO: Rebuild all secondary indexes
@@ -531,7 +583,32 @@ private:
         // C++ TIP: The syntax 'const auto& [id, user]' is called structured bindings
         // It's like destructuring in JavaScript/Python
         //
-        // YOUR CODE HERE:
+
+        username_to_id.clear();
+
+        for (const auto &[id, user] : users)
+        {
+            username_to_id[user.username] = id;
+        }
+
+        post_to_user.clear();
+
+        for (const auto &[post_id, post] : posts)
+        {
+
+            auto it = username_to_id.find(post.username);
+
+            if (it != username_to_id.end())
+            {
+                post_to_user[post_id] = it->second;
+            }
+        }
+
+        user_to_location.clear();
+        for (const auto &[id, user] : users)
+        {
+            user_to_location[id] = user.location;
+        }
     }
 
 public:
@@ -602,6 +679,16 @@ public:
         // You can reuse loadSingleFile() or implement directly here.
         //
         // YOUR CODE HERE:
+
+        users.clear();
+        posts.clear();
+        engagements.clear();
+
+        loadUsers(users);
+        loadPosts(posts);
+        loadEngagements(engagements);
+
+        rebuildIndexes();
     }
 
     /**
@@ -641,6 +728,21 @@ public:
         // 7. Rebuild indexes
         //
         // YOUR CODE HERE:
+
+        users.clear();
+        posts.clear();
+        engagements.clear();
+
+        thread t1([&]()
+                  { loadUsers(users); });
+        thread t2([&]()
+                  { loadPosts(posts); });
+        thread t3([&]()
+                  { loadEngagements(engagements); });
+
+        t1.join();
+        t2.join();
+        t3.join();
     }
 
     /**
@@ -656,26 +758,25 @@ public:
      */
     bool updatePostViews(int post_id, int views_count)
     {
-        // Suppress unused parameter warnings until implemented
-        (void)post_id;
-        (void)views_count;
+        lock_guard<mutex> lock(posts_mutex);
 
-        // TODO: Implement thread-safe, durable view count update
-        //
-        // STEPS:
-        // 1. Lock the posts mutex
-        // 2. Check if post_id exists
-        // 3. Update the view count in memory
-        // 4. Rewrite posts.csv atomically
-        // 5. Return true on success
-        //
-        // LOCKING EXAMPLE:
-        //   lock_guard<mutex> lock(posts_mutex);  // Locks on construction
-        //   // ... do work ...
-        //   // Automatically unlocks when lock goes out of scope
-        //
-        // YOUR CODE HERE:
-        return false; // Placeholder
+        auto it = posts.find(post_id);
+        if (it == posts.end())
+        {
+            return false;
+        }
+
+        it->second.views = views_count;
+
+        const string header = "id,content,username,views\n";
+        vector<string> lines;
+        for (const auto &[id, post] : posts)
+        {
+            lines.push_back(to_string(post.id) + "," + post.content + "," + post.username + "," + to_string(post.views) + "\n");
+        }
+
+        lock_guard<mutex> file_lock(file_mutex);
+        return atomicWriteCSV(posts_csv_path, header, lines);
     }
 
     /**
